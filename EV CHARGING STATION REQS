@@ -1,0 +1,18 @@
+Hardware Requirements
+ESP32/Arduino – For controlling the charging process.
+Relay Module (40A or more) – To switch the power supply.
+Current Sensor (ACS712/INA219) – For monitoring charging current.
+Voltage Sensor – To monitor battery voltage.
+LCD Display (I2C 16x2 or OLED SSD1306) – For displaying charging status.
+RFID Module (RC522) – For authentication (optional).
+WiFi Module (if using ESP8266/ESP32) – For cloud monitoring.
+Power Supply (220V to 12V DC) – To power the controller.
+Charging Plug (Type 1 or Type 2 connector) – Based on your EV type.
+
+
+💻 Software & Code
+
+Monitors voltage & current
+Displays charging statuS
+Controls the charging relay
+Can be extended with WiFi monitoring
