@@ -1,0 +1,55 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <WiFi.h>
+
+#define RELAY_PIN 5
+#define VOLTAGE_SENSOR_PIN 34
+#define CURRENT_SENSOR_PIN 35
+
+const char* ssid = "YourWiFiSSID";
+const char* password = "YourWiFiPassword";
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void setup() {
+    Serial.begin(115200);
+    pinMode(RELAY_PIN, OUTPUT);
+    lcd.init();
+    lcd.backlight();
+    
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println("WiFi Connected");
+    
+    lcd.setCursor(0, 0);
+    lcd.print("EV Charger Ready");
+}
+
+void loop() {
+    float voltage = analogRead(VOLTAGE_SENSOR_PIN) * (5.0 / 4095.0) * 10;
+    float current = analogRead(CURRENT_SENSOR_PIN) * (5.0 / 4095.0) * 5;
+    
+    Serial.print("Voltage: "); Serial.print(voltage); Serial.println("V");
+    Serial.print("Current: "); Serial.print(current); Serial.println("A");
+    
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("V: "); lcd.print(voltage); lcd.print("V");
+    lcd.setCursor(0, 1);
+    lcd.print("I: "); lcd.print(current); lcd.print("A");
+    
+    if (voltage > 10 && current < 10) {
+        digitalWrite(RELAY_PIN, HIGH);
+        lcd.setCursor(10, 1);
+        lcd.print("ON ");
+    } else {
+        digitalWrite(RELAY_PIN, LOW);
+        lcd.setCursor(10, 1);
+        lcd.print("OFF");
+    }
+    
+    delay(2000);
+}
